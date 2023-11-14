@@ -122,6 +122,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>hardik153/share-managment-image</finalName>
 	</build>
 
 </project>
