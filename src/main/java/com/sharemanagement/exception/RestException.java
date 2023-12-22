@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.google.gson.Gson;
 import com.sharemanagement.dto.ResponseDto;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class RestException {
 	
 	@ExceptionHandler(BadCredentialsException.class)
@@ -19,6 +22,7 @@ public class RestException {
 		 ResponseDto err = new ResponseDto();
 		 err.setMessage("error");
 		 err.setData(e.getMessage());
+		 log.error(e.getMessage());
 		 return new ResponseEntity<>(new Gson().toJson(err),HttpStatus.NOT_FOUND);
 	}
 	
@@ -28,6 +32,7 @@ public class RestException {
 		 ResponseDto err = new ResponseDto();
 		 err.setMessage("error");
 		 err.setData(e.getMessage());
+		 log.error(e.getMessage());
 		 return new ResponseEntity<>(new Gson().toJson(err),HttpStatus.UNAUTHORIZED);
 	}
 
@@ -37,6 +42,7 @@ public class RestException {
 		 ResponseDto err = new ResponseDto();
 		 err.setMessage("error");
 		 err.setData(e.getMessage());
+		 log.error(e.getMessage());
 		 return new ResponseEntity<>(new Gson().toJson(err),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

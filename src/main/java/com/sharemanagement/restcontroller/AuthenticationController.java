@@ -9,6 +9,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +44,8 @@ public class AuthenticationController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-	@GetMapping(value = "/index")
+	@CrossOrigin(origins="http://0.0.0.0:8080")
+	@PostMapping(value = "/index")
 	@ResponseBody
 	public AuthenticationResponse createAuthenticaionToken(@RequestBody AuthenticationRequest authenticationRequest,HttpServletResponse response) throws BadCredentialsException,DisabledException,UsernameNotFoundException,IOException, java.io.IOException {
 		
