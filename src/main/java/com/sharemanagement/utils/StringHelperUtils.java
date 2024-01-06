@@ -2,6 +2,8 @@ package com.sharemanagement.utils;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+
 @Component
 public class StringHelperUtils {
 
@@ -63,6 +65,24 @@ public class StringHelperUtils {
 			return 0;
 		}
 
+	}
+
+	public BigInteger handleBigInt(Object obj){
+
+		try{
+
+			if(obj == null){
+
+				return new BigInteger("0");
+
+			}else{
+				return (BigInteger) obj;
+			}
+
+		}catch(Exception e){
+
+			return new BigInteger("0");
+		}
 	}
 
 }

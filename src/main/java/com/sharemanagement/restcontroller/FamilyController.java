@@ -49,5 +49,4 @@ public class FamilyController {
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
 	
-	
 }
