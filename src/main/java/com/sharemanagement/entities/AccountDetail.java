@@ -36,12 +36,14 @@ public class AccountDetail implements Serializable {
 
     @Column(name="bank_name")
     private String bankName;
+
     @Column(name="bank_address")
     private String bankAddress;
 
     @Column(name="created_by")
     private BigInteger createdBy;
 
+    @Transient
     @Temporal(TemporalType.DATE)
     @Column(name="created_date")
     private Date createdDate;

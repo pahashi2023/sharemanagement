@@ -31,6 +31,7 @@ public class FamilyMember implements Serializable {
 	@Column(name="address")
 	private String address;
 
+
 	@Column(name="created_by")
 	private BigInteger createdBy;
 

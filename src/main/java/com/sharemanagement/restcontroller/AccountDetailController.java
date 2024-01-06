@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v1/account-detail")
+@RequestMapping("/api/v1")
 public class AccountDetailController {
 
     public static final Logger logger = LoggerFactory.getLogger(AccountDetailController.class);
@@ -27,7 +27,7 @@ public class AccountDetailController {
 
 
 
-    @PostMapping(value="/save",produces = "application/json",consumes = "application/json",headers="Accept=application/json")
+    @PostMapping(value="/account-detail/save",produces = "application/json",consumes = "application/json",headers="Accept=application/json")
     public ResponseEntity<String> saveAccountDetail(@RequestBody AccountDetailDTO accountDetailDTO) {
         accountDetailService.saveAccountDetail(accountDetailDTO);
 

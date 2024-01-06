@@ -23,13 +23,14 @@ public class AccountDetailServiceImpl implements AccountDetailService {
     public void saveAccountDetail(AccountDetailDTO accountDetailDTO) {
         // Convert DTO to Entity and save
         AccountDetail accountDetail = new AccountDetail();
+        accountDetail.setCreatedBy(stringHelperUtils.handleBigInt(accountDetailDTO.getUserId()));
         accountDetail.setMemberId(stringHelperUtils.handleBigInt(accountDetailDTO.getMemberId()));
-        accountDetail.setAccountType(stringHelperUtils.handleString(accountDetail.getAccountType()));
-        accountDetail.setBankName(stringHelperUtils.handleString(accountDetail.getBankName()));
+        accountDetail.setAccountType(stringHelperUtils.handleString(accountDetailDTO.getAccountType()));
+        accountDetail.setBankName(stringHelperUtils.handleString(accountDetailDTO.getBankName()));
         accountDetail.setAccountHolderName(stringHelperUtils.handleString(accountDetailDTO.getAccountHolderName()));
-        accountDetail.setAccountNumber(stringHelperUtils.handleString(accountDetail.getAccountNumber()));
-        accountDetail.setIfscCode(stringHelperUtils.handleString(accountDetail.getIfscCode()));
-        accountDetail.setBankAddress(stringHelperUtils.handleString(accountDetail.getBankAddress()));
+        accountDetail.setAccountNumber(stringHelperUtils.handleString(accountDetailDTO.getAccountNumber()));
+        accountDetail.setIfscCode(stringHelperUtils.handleString(accountDetailDTO.getIfscCode()));
+        accountDetail.setBankAddress(stringHelperUtils.handleString(accountDetailDTO.getBankAddress()));
         accountDetailRepo.saveAccountDetail(accountDetail);
     }
 
