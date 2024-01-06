@@ -1,11 +1,15 @@
 package com.sharemanagement.services;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
 import com.sharemanagement.entities.FamilyMember;
 import com.sharemanagement.repositories.FamilyRepo;
@@ -20,6 +24,9 @@ public class FamilyServiceImpl implements FamilyService {
 	@Autowired
 	StringHelperUtils stringHelperUtils;
 	
+	@Autowired
+	ModelMapper mapper;
+	
 	@Override
 	@Transactional
 	public String createFamily(FamilyRequestDto familyRequestDto) throws Exception {
@@ -28,6 +35,7 @@ public class FamilyServiceImpl implements FamilyService {
 			
 			com.sharemanagement.entities.Family familyData = new com.sharemanagement.entities.Family();
 			familyData.setCreatedBy(new BigInteger(String.valueOf(familyRequestDto.getUserId())));
+			familyData.setStatus(1);
 			Long familyId = familyRepo.createFamilyId(familyData);
 			
 		familyRequestDto.getFamilyDto().stream().forEach(family -> {
@@ -43,6 +51,7 @@ public class FamilyServiceImpl implements FamilyService {
 			families.setPhone(stringHelperUtils.handleString(family.getPhone()));
 			families.setRelation(stringHelperUtils.handleString(family.getRelation()));
 			families.setFamilyId(new BigInteger(String.valueOf(familyId)));
+			families.setStatus(1);
 			familyRepo.createFamily(families);
 		});
 		
@@ -53,6 +62,43 @@ public class FamilyServiceImpl implements FamilyService {
 			throw new Exception(e.getMessage());
 		}
 		
+	}
+
+	@Override
+	@Transactional
+	public List<FamilyDto> getAllFamily(int pageCount) {
+		
+		
+		int firstResult = 10;
+		int pgCount = (pageCount-1)* firstResult;
+		
+		List<FamilyMember> result = familyRepo.getAllFamily(pgCount);
+		
+		try {
+		
+			List<FamilyDto> mapData = result.stream().map(data -> {
+	        	
+				FamilyDto familyDto = mapper.map(data, FamilyDto.class);
+				return familyDto;
+				
+			}).toList();
+			
+			return mapData;
+			
+		}catch(Exception e) {
+			
+			return new ArrayList<FamilyDto>();
+		}
+		
+        
+        
+	}
+
+	@Override
+	@Transactional
+	public long getFamiltTotalCount() {
+		
+		return familyRepo.getFamilyTotalCount();
 	}
 
 }

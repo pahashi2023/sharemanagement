@@ -44,7 +44,6 @@ public class AuthenticationController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-	@CrossOrigin(origins="http://0.0.0.0:8080")
 	@PostMapping(value = "/index")
 	@ResponseBody
 	public AuthenticationResponse createAuthenticaionToken(@RequestBody AuthenticationRequest authenticationRequest,HttpServletResponse response) throws BadCredentialsException,DisabledException,UsernameNotFoundException,IOException, java.io.IOException {

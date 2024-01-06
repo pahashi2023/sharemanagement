@@ -2,6 +2,9 @@ package com.sharemanagement.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import lombok.Data;
+
 import java.util.Date;
 import java.math.BigInteger;
 
@@ -12,6 +15,7 @@ import java.math.BigInteger;
  */
 @Entity
 @Table(name="family_member")
+@Data
 public class FamilyMember implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -67,144 +71,18 @@ public class FamilyMember implements Serializable {
 	
 	@Column(name="family_id")
 	private BigInteger familyId;
-
-	public FamilyMember() {
-	}
-
 	
-
-	public long getMemberId() {
-		return memberId;
+	@Column(name="status")
+	private int status;
+	
+	public FamilyMember() {
+		
 	}
-
-
-
-	public void setMemberId(long memberId) {
+	public FamilyMember(long memberId) {
+		
 		this.memberId = memberId;
 	}
 
-
-
-	public BigInteger getFamilyId() {
-		return familyId;
-	}
-
-
-
-	public String getAadharNo() {
-		return this.aadharNo;
-	}
-
-	public void setAadharNo(String aadharNo) {
-		this.aadharNo = aadharNo;
-	}
-
-	public String getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public BigInteger getCreatedBy() {
-		return this.createdBy;
-	}
-
-	public void setCreatedBy(BigInteger createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getCreatedDate() {
-		return this.createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public String getEmailId() {
-		return this.emailId;
-	}
-
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public void setFamilyId(BigInteger familyId) {
-		this.familyId = familyId;
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getMiddleName() {
-		return this.middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getPanNo() {
-		return this.panNo;
-	}
-
-	public void setPanNo(String panNo) {
-		this.panNo = panNo;
-	}
-
-	public String getPhone() {
-		return this.phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public BigInteger getPinCode() {
-		return this.pinCode;
-	}
-
-	public void setPinCode(BigInteger pinCode) {
-		this.pinCode = pinCode;
-	}
-
-	public String getRelation() {
-		return this.relation;
-	}
-
-	public void setRelation(String relation) {
-		this.relation = relation;
-	}
-
-	public BigInteger getUpdatedBy() {
-		return this.updatedBy;
-	}
-
-	public void setUpdatedBy(BigInteger updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Date getUpdatedDate() {
-		return this.updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
+	
 
 }
