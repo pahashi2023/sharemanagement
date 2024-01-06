@@ -18,6 +18,7 @@ public class FamilyDto {
 	private BigInteger pinCode;
 	private String address;
 	private int status;
+	private BigInteger familyId;
 	
 	@Override
 	public String toString() {
