@@ -76,5 +76,11 @@ public class AccountDetailServiceImpl implements AccountDetailService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteAccountdetails(int accDetId) {
+        accountDetailRepo.deleteAccountdetails(accDetId);
+    }
+
 
 }

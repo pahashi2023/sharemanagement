@@ -9,9 +9,10 @@ import java.util.List;
 @Repository
 public interface AccountDetailRepo {
 //    void saveAccountDetail(AccountDetail accountDetail);
-void saveAccountDetail(List<AccountDetail> accountDetails);
+    void saveAccountDetail(List<AccountDetail> accountDetails);
 
     public List<AccountDetail> getAllAccountDetails(int familyId);
 
+    void deleteAccountdetails(int accDetId);
 
 }

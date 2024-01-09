@@ -9,6 +9,7 @@ public interface AccountDetailService {
 
     public List<AccountDetailDTO> getAllAccountDetails(int familyId);
 
+    void deleteAccountdetails(int accDetId);
 }
 
 

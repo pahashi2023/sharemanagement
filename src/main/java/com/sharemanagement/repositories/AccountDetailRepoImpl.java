@@ -9,10 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 
@@ -43,10 +40,29 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
         Root<AccountDetail> root = query.from(AccountDetail.class);
 
         query.select(root);
-        query.where(builder.equal(root.get("familyId"), familyId));
+        query.where(
+                builder.and(
+                        builder.equal(root.get("familyId"), familyId),
+                        builder.equal(root.get("status"), 1)
+                )
+        );
 
         Query<AccountDetail> q = session.createQuery(query);
         return q.getResultList();
+    }
+
+    @Override
+    public void deleteAccountdetails(int accDetId) {
+
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaUpdate<AccountDetail> update = builder.createCriteriaUpdate(AccountDetail.class);
+        Root<AccountDetail> root = update.from(AccountDetail.class);
+
+        update.set("status", 0);
+        update.where(builder.equal(root.get("accDetId"), accDetId));
+
+        session.createQuery(update).executeUpdate();
     }
 
 }

@@ -45,4 +45,12 @@ public class AccountDetailController {
         dto.setData(result);
         return ResponseEntity.ok(new Gson().toJson(dto));
     }
+    @PostMapping(value = "/deleteAccountdetails",produces = "application/json",headers="Accept=application/json")
+    public ResponseEntity<String> deleteAccountdetails(@RequestParam(name = "accDetId") int accDetId ){
+
+        accountDetailService.deleteAccountdetails(accDetId);
+        ResponseDto dto = new ResponseDto();
+        dto.setMessage("Deleted Successfully");
+        return ResponseEntity.ok(new Gson().toJson(dto));
+    }
 }
