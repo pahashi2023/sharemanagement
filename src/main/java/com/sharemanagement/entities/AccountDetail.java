@@ -7,6 +7,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.math.BigInteger;
+import java.util.List;
 
 
 /**
@@ -60,6 +61,12 @@ public class AccountDetail implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name="updated_date")
     private Date updatedDate;
+
+    @Column(name="family_id")
+    private BigInteger familyId;
+
+    @Column(name="status")
+    private int status;
 
     public AccountDetail() {
     }
