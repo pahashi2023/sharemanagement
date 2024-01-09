@@ -2,6 +2,7 @@ package com.sharemanagement.services;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -52,6 +53,8 @@ public class FamilyServiceImpl implements FamilyService {
 			families.setRelation(stringHelperUtils.handleString(family.getRelation()));
 			families.setFamilyId(new BigInteger(String.valueOf(familyId)));
 			families.setStatus(1);
+			families.setCreatedBy(new BigInteger(String.valueOf(familyRequestDto.getUserId())));
+			families.setPinCode(family.getPinCode());
 			familyRepo.createFamily(families);
 		});
 		
@@ -99,6 +102,57 @@ public class FamilyServiceImpl implements FamilyService {
 	public long getFamiltTotalCount() {
 		
 		return familyRepo.getFamilyTotalCount();
+	}
+
+	@Override
+	@Transactional
+	public String deleteMemberFromFamily(Long memberId,BigInteger userId) {
+	
+		FamilyMember familyMember = familyRepo.getFamilyMemberById(memberId);
+		familyMember.setStatus(0);
+		familyMember.setUpdatedBy(userId);
+		familyMember.setUpdatedDate(new Date());
+		try {
+			
+			familyRepo.deleteMemberFromFamily(familyMember);
+			return "success";
+			
+		}catch(Exception e) {
+			
+			return "error";
+		}
+		
+		
+	}
+
+	@Override
+	@Transactional
+	public String updateFamilyMember(FamilyDto familyDto,BigInteger userId) {
+		
+		FamilyMember familyMember = familyRepo.getFamilyMemberById(familyDto.getMemberId().longValue());
+		familyMember.setAadharNo(familyDto.getAadharNo());
+		familyMember.setAddress(familyDto.getAddress());
+		familyMember.setEmailId(familyDto.getEmailId());
+		familyMember.setFirstName(familyDto.getFirstName());
+		familyMember.setLastName(familyDto.getLastName());
+		familyMember.setMiddleName(familyDto.getMiddleName());
+		familyMember.setPanNo(familyDto.getPanNO());
+		familyMember.setPhone(familyDto.getPhone());
+		familyMember.setPinCode(familyDto.getPinCode());
+		familyMember.setRelation(familyDto.getRelation());
+		familyMember.setUpdatedBy(userId);
+		familyMember.setUpdatedDate(new Date());
+		try {
+			
+			familyRepo.deleteMemberFromFamily(familyMember);
+			
+			return "success";
+			
+		}catch(Exception e) {
+			
+			return "error";
+		}
+		
 	}
 
 }

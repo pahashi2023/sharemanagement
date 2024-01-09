@@ -1,6 +1,7 @@
 package com.sharemanagement.repositories;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -49,6 +50,10 @@ public class FamilyRepoImpl implements FamilyRepo {
 		
 		query.select(root);
 		
+		Predicate where;
+		where = builder.equal(root.get("status"), 1);
+		query.where(where);
+		
 		Query<FamilyMember> q = session.createQuery(query);
 		return q.setFirstResult(pageCount).setMaxResults(10).getResultList();
 	}
@@ -69,6 +74,31 @@ public class FamilyRepoImpl implements FamilyRepo {
 		Query<Long> q = session.createQuery(query);
 		
 		return q.getSingleResult();
+		
+	}
+
+	@Override
+	public FamilyMember getFamilyMemberById(Long memberId) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<FamilyMember> query = builder.createQuery(FamilyMember.class);
+		Root<FamilyMember> root = query.from(FamilyMember.class);
+		
+		query.select(root);
+		
+		Predicate where;
+		where = builder.equal(root.get("memberId"), memberId);
+		query.where(where);
+	    Query<FamilyMember> q =session.createQuery(query);
+		return q.getSingleResult();
+	}
+
+	@Override
+	public void deleteMemberFromFamily(FamilyMember familyMember) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		session.update(familyMember);
 		
 	}
 

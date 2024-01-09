@@ -1,5 +1,6 @@
 package com.sharemanagement.restcontroller;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -46,6 +47,25 @@ public class FamilyController {
     	   dto.setMessage("success");
     	   dto.setData(result);
     	   dto.setTotalPage(familyService.getFamiltTotalCount());
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
+       
+       @PostMapping(value = "/delete-member",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> deleteMemberById(@RequestParam(name = "memberId", required=true) Long memberId,@RequestParam(name = "userId", required=true) BigInteger userId){
+    	   
+    	   String result = familyService.deleteMemberFromFamily(memberId,userId);
+
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
+       
+       @PostMapping(value = "/update-member",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> updateFamilyMember(@RequestParam(name = "userId", required=true) BigInteger userId,@RequestBody FamilyDto familyDto){
+    	   
+    	   String result =  familyService.updateFamilyMember(familyDto,userId);
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
 	

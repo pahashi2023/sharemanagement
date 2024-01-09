@@ -19,16 +19,17 @@ public class FamilyDto {
 	private String address;
 	private int status;
 	private BigInteger familyId;
+	private BigInteger memberId;
 	
 	@Override
 	public String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("{'firstName':"+firstName).append(",'middleName':"+middleName).append(",'lastName':"+lastName)
-		.append(",'phone':"+phone).append(",'emailId':"+emailId).append(",'aadharNo':"+aadharNo).append(",'panNO':"+panNO)
-		.append(",'relation':"+relation).append(",'pinCode':"+pinCode).append(",'address':"+address);
-		return sb.toString();
+		return "FamilyDto [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
+				+ ", phone=" + phone + ", emailId=" + emailId + ", aadharNo=" + aadharNo + ", panNO=" + panNO
+				+ ", relation=" + relation + ", pinCode=" + pinCode + ", address=" + address + ", status=" + status
+				+ ", familyId=" + familyId + ", memberId=" + memberId + "]";
 	}
+	
+	
 	
 	
 	

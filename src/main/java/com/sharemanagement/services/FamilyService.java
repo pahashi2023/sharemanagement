@@ -1,5 +1,6 @@
 package com.sharemanagement.services;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.sharemanagement.dto.FamilyDto;
@@ -12,5 +13,9 @@ public interface FamilyService {
 	public List<FamilyDto> getAllFamily(int pageCount);
 	
 	public long getFamiltTotalCount();
+	
+	public String deleteMemberFromFamily(Long memberId,BigInteger userId);
+	
+	public String updateFamilyMember(FamilyDto familyDto,BigInteger userId);
 
 }

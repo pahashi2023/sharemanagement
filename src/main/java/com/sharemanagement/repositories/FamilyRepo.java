@@ -1,5 +1,6 @@
 package com.sharemanagement.repositories;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.sharemanagement.entities.Family;
@@ -14,5 +15,9 @@ public interface FamilyRepo {
 	public List<FamilyMember> getAllFamily(int pageCount);
 	
 	public long getFamilyTotalCount();
+	
+	public FamilyMember getFamilyMemberById(Long memberId);
+	
+	public void deleteMemberFromFamily(FamilyMember familyMember);
 
 }
