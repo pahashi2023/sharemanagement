@@ -17,5 +17,7 @@ public interface FamilyService {
 	public String deleteMemberFromFamily(Long memberId,BigInteger userId);
 	
 	public String updateFamilyMember(FamilyDto familyDto,BigInteger userId);
+	
+	public String getIndividualMember(Long memberId);
 
 }

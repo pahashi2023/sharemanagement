@@ -102,4 +102,28 @@ public class FamilyRepoImpl implements FamilyRepo {
 		
 	}
 
+	@Override
+	public FamilyMember getFamilyMemberByIdActive(Long memberId) {
+	    
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<FamilyMember> query = builder.createQuery(FamilyMember.class);
+		Root<FamilyMember> root = query.from(FamilyMember.class);
+		
+		query.select(root);
+		
+		Predicate where;
+		where = builder.equal(root.get("memberId"), memberId);
+		where = builder.and(where,builder.equal(root.get("status"),1));
+		query.where(where);
+	    Query<FamilyMember> q =session.createQuery(query);
+	    try {
+	    	
+		   return q.getSingleResult();
+		   
+	    }catch(Exception e) {
+	    	return null;
+	    }
+	}
+
 }
