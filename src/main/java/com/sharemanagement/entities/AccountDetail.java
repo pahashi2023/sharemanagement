@@ -26,8 +26,6 @@ public class AccountDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long accDetId;
 
-    @Column(name="account_holder_name")
-    private String accountHolderName;
 
     @Column(name="account_number")
     private String accountNumber;
@@ -52,8 +50,8 @@ public class AccountDetail implements Serializable {
     @Column(name="ifsc_code")
     private String ifscCode;
 
-    @Column(name="member_id")
-    private BigInteger memberId;
+    @OneToMany(mappedBy = "accountDetail", cascade = CascadeType.ALL)
+    private List<AccountMemberDetails> accountMemberDetails;
 
     @Column(name="updated_by")
     private BigInteger updatedBy;

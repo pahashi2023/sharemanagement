@@ -1,8 +1,7 @@
 package com.sharemanagement.repositories;
 
 import com.sharemanagement.entities.AccountDetail;
-import com.sharemanagement.entities.FamilyMember;
-import org.apache.juli.logging.Log;
+import com.sharemanagement.entities.AccountMemberDetails;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -18,37 +17,51 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
 
     @Autowired
     SessionFactory sessionFactory;
+
     @Override
     public void saveAccountDetail(List<AccountDetail> accountDetails) {
         Session session = sessionFactory.getCurrentSession();
 
         for (AccountDetail accountDetail : accountDetails) {
-                session.merge(accountDetail);
+            try {
+                // Save or update AccountDetail
+                session.saveOrUpdate(accountDetail);
+
+                long accDetId = accountDetail.getAccDetId();
+
+                List<AccountMemberDetails> memberDetails = accountDetail.getAccountMemberDetails();
+                if (memberDetails != null) {
+                    for (AccountMemberDetails memberDetail : memberDetails) {
+
+                        memberDetail.setAccDetId(accDetId);
+                        session.saveOrUpdate(memberDetail);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error saving/updating AccountDetail: {} " + e.getMessage());
+                e.printStackTrace();
+            }
         }
-
-       // accountDetails.forEach(accountDetail -> session.saveOrUpdate(accountDetail));
-       // session.persist(accountDetails);
-
     }
-
     @Override
     public List<AccountDetail> getAllAccountDetails(int familyId) {
 
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<AccountDetail> query = builder.createQuery(AccountDetail.class);
-        Root<AccountDetail> root = query.from(AccountDetail.class);
 
-        query.select(root);
+        Root<AccountDetail> accountDetailRoot = query.from(AccountDetail.class);
+        accountDetailRoot.fetch("accountMemberDetails", JoinType.LEFT);
+
+        query.select(accountDetailRoot)
+                .distinct(true);
         query.where(
-                builder.and(
-                        builder.equal(root.get("familyId"), familyId),
-                        builder.equal(root.get("status"), 1)
-                )
+                builder.equal(accountDetailRoot.get("familyId"), familyId),
+                builder.equal(accountDetailRoot.get("status"), 1)
         );
 
-        Query<AccountDetail> q = session.createQuery(query);
-        return q.getResultList();
+        Query<AccountDetail> typedQuery = session.createQuery(query);
+        return typedQuery.getResultList();
     }
 
     @Override

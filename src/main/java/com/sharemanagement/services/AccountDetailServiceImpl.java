@@ -1,7 +1,9 @@
 package com.sharemanagement.services;
 
 import com.sharemanagement.dto.AccountDetailDTO;
+import com.sharemanagement.dto.AccountMemberDetailsDto;
 import com.sharemanagement.entities.AccountDetail;
+import com.sharemanagement.entities.AccountMemberDetails;
 import com.sharemanagement.repositories.AccountDetailRepo;
 
 import com.sharemanagement.utils.StringHelperUtils;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,48 +31,66 @@ public class AccountDetailServiceImpl implements AccountDetailService {
 
     @Override
     @Transactional
-    public void saveAccountDetail(List<AccountDetailDTO> accountDetailDTO) {
-        List<AccountDetail> accountDetails = accountDetailDTO.stream()
+    public void saveAccountDetail(List<AccountDetailDTO> accountDetailDTOList) {
+        List<AccountDetail> accountDetails = accountDetailDTOList.stream()
                 .map(dto -> {
                     AccountDetail accountDetail = new AccountDetail();
                     accountDetail.setCreatedBy(stringHelperUtils.handleBigInt(dto.getUserId()));
-                    accountDetail.setMemberId(stringHelperUtils.handleBigInt(dto.getMemberId()));
                     accountDetail.setAccountType(stringHelperUtils.handleString(dto.getAccountType()));
                     accountDetail.setBankName(stringHelperUtils.handleString(dto.getBankName()));
-                    accountDetail.setAccountHolderName(stringHelperUtils.handleString(dto.getAccountHolderName()));
                     accountDetail.setAccountNumber(stringHelperUtils.handleString(dto.getAccountNumber()));
                     accountDetail.setIfscCode(stringHelperUtils.handleString(dto.getIfscCode()));
                     accountDetail.setBankAddress(stringHelperUtils.handleString(dto.getBankAddress()));
                     accountDetail.setFamilyId(new BigInteger(String.valueOf(dto.getFamilyId())));
                     accountDetail.setStatus(1);
 
+                    // Check if accDetId exists, then update;
                     if (dto.getAccDetId() != 0) {
                         accountDetail.setAccDetId(dto.getAccDetId());
-
-                    } else {
-                        accountDetail.setAccDetId(0);
                     }
+
+                    List<AccountMemberDetails> memberDetails = dto.getAccountMemberDetailDtos().stream()
+                            .map(memberDto -> {
+                                AccountMemberDetails memberDetail = new AccountMemberDetails();
+                                memberDetail.setAccountDetail(accountDetail);  // Set the relationship
+                                memberDetail.setMemberId(stringHelperUtils.handleBigInt(memberDto.getMemberId()));
+                                memberDetail.setAccountHolderName(stringHelperUtils.handleString(memberDto.getAccountHolderName()));
+
+                                // Check if memberDetailId exists, then update;
+                                if (memberDto.getMemberDetailId() != 0) {
+                                    memberDetail.setMemberDetailId(memberDto.getMemberDetailId());
+                                }
+
+                                return memberDetail;
+                            })
+                            .collect(Collectors.toList());
+
+                    accountDetail.setAccountMemberDetails(memberDetails);
                     return accountDetail;
                 })
                 .collect(Collectors.toList());
-        accountDetailRepo.saveAccountDetail(accountDetails);
 
+        accountDetailRepo.saveAccountDetail(accountDetails);
     }
 
     @Override
     @Transactional
     public List<AccountDetailDTO> getAllAccountDetails(int familyId) {
-
-
-
         List<AccountDetail> result = accountDetailRepo.getAllAccountDetails(familyId);
 
         try {
+            return result.stream().map(data -> {
+                AccountDetailDTO accountDetailDTO = mapper.map(data, AccountDetailDTO.class);
 
-            return result.stream().map(data -> mapper.map(data, AccountDetailDTO.class)).toList();
+                // Map AccountMemberDetails to AccountMemberDetailDTO
+                List<AccountMemberDetailsDto> memberDetailDTOs = data.getAccountMemberDetails().stream()
+                        .map(memberDetail -> mapper.map(memberDetail, AccountMemberDetailsDto.class))
+                        .collect(Collectors.toList());
 
-        }catch(Exception e) {
-
+                accountDetailDTO.setAccountMemberDetailDtos(memberDetailDTOs);
+                return accountDetailDTO;
+            }).collect(Collectors.toList());
+        } catch (Exception e) {
             return new ArrayList<>();
         }
     }

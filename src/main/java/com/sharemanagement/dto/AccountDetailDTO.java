@@ -11,10 +11,9 @@ import java.util.List;
 public class AccountDetailDTO {
     private long accDetId;
     private BigInteger userId;
-    private BigInteger memberId;
     private String accountType;
     private String bankName;
-    private String accountHolderName;
+    private List<AccountMemberDetailsDto> accountMemberDetailDtos;
     private String accountNumber;
     private String ifscCode;
     private String bankAddress;

@@ -2,10 +2,7 @@ package com.sharemanagement.restcontroller;
 
 import com.google.gson.Gson;
 import com.sharemanagement.dto.AccountDetailDTO;
-import com.sharemanagement.dto.FamilyDto;
-import com.sharemanagement.dto.FamilyResponseDto;
 import com.sharemanagement.dto.ResponseDto;
-import com.sharemanagement.entities.AccountDetail;
 import com.sharemanagement.services.AccountDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +22,9 @@ public class AccountDetailController {
     @Autowired
     private AccountDetailService accountDetailService;
 
-
-
-    @PostMapping(value="/account-detail/save",produces = "application/json",consumes = "application/json",headers="Accept=application/json")
-    public ResponseEntity<String> saveAccountDetail(@RequestBody List<AccountDetailDTO> accountDetailDTO) {
-        accountDetailService.saveAccountDetail(accountDetailDTO);
+    @PostMapping(value = "/account-detail/save", produces = "application/json", consumes = "application/json", headers = "Accept=application/json")
+    public ResponseEntity<String> saveAccountDetail(@RequestBody List<AccountDetailDTO> accountDetailDTOList) {
+        accountDetailService.saveAccountDetail(accountDetailDTOList);
 
         ResponseDto dto = new ResponseDto();
         dto.setMessage("success");
