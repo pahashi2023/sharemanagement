@@ -4,12 +4,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
 import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
 import com.sharemanagement.entities.FamilyMember;
@@ -153,6 +156,24 @@ public class FamilyServiceImpl implements FamilyService {
 			return "error";
 		}
 		
+	}
+
+	@Override
+	@Transactional
+	public String getIndividualMember(Long memberId) {
+		
+		FamilyMember familyMember = familyRepo.getFamilyMemberByIdActive(memberId);
+		try {
+			
+		FamilyDto familyDto = mapper.map(familyMember,FamilyDto.class);		
+		return new Gson().toJson(familyDto);
+		
+		}catch(Exception e) {
+			
+			Map<String,String> res = new HashMap<>();
+			res.put("message", "User not exist!");
+			return new Gson().toJson(res);
+		}
 	}
 
 }

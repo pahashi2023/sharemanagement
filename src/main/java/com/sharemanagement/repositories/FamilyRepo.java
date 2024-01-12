@@ -18,6 +18,8 @@ public interface FamilyRepo {
 	
 	public FamilyMember getFamilyMemberById(Long memberId);
 	
+	public FamilyMember getFamilyMemberByIdActive(Long memberId);
+	
 	public void deleteMemberFromFamily(FamilyMember familyMember);
 
 }

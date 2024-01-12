@@ -68,5 +68,11 @@ public class FamilyController {
     	   dto.setMessage(result);
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
+       
+       @PostMapping(value = "/get-individual-member",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> getIndividualMember(@RequestParam(name = "memberId", required=true) Long memberId){
+    	   
+    	   return ResponseEntity.ok(familyService.getIndividualMember(memberId));
+       }
 	
 }
