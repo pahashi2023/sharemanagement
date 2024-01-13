@@ -66,6 +66,18 @@ public class AccountDetail implements Serializable {
     @Column(name="status")
     private int status;
 
+    @Column(name="account_member_address")
+    private String accountMemberAddress;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="phone")
+    private String phone;
+
+    @Column(name="account_opening_date")
+    private Date accountOpeningDate;
+
     public AccountDetail() {
     }
 

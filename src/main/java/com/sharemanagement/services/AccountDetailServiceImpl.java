@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +43,10 @@ public class AccountDetailServiceImpl implements AccountDetailService {
                     accountDetail.setIfscCode(stringHelperUtils.handleString(dto.getIfscCode()));
                     accountDetail.setBankAddress(stringHelperUtils.handleString(dto.getBankAddress()));
                     accountDetail.setFamilyId(new BigInteger(String.valueOf(dto.getFamilyId())));
+                    accountDetail.setAccountMemberAddress(stringHelperUtils.handleString(dto.getAccountMemberAddress()));
+                    accountDetail.setEmail(stringHelperUtils.handleString(dto.getEmail()));
+                    accountDetail.setPhone(stringHelperUtils.handleString(dto.getPhone()));
+                    accountDetail.setAccountOpeningDate(dto.getAccountOpeningDate());
                     accountDetail.setStatus(1);
 
                     // Check if accDetId exists, then update;
@@ -75,8 +80,8 @@ public class AccountDetailServiceImpl implements AccountDetailService {
 
     @Override
     @Transactional
-    public List<AccountDetailDTO> getAllAccountDetails(int familyId) {
-        List<AccountDetail> result = accountDetailRepo.getAllAccountDetails(familyId);
+    public List<AccountDetailDTO> getAllAccountDetails(int familyId, String accountType) {
+        List<AccountDetail> result = accountDetailRepo.getAllAccountDetails(familyId,accountType);
 
         try {
             return result.stream().map(data -> {

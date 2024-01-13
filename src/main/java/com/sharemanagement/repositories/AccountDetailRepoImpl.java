@@ -44,7 +44,7 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
         }
     }
     @Override
-    public List<AccountDetail> getAllAccountDetails(int familyId) {
+    public List<AccountDetail> getAllAccountDetails(int familyId,String accountType) {
 
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -57,7 +57,8 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
                 .distinct(true);
         query.where(
                 builder.equal(accountDetailRoot.get("familyId"), familyId),
-                builder.equal(accountDetailRoot.get("status"), 1)
+                builder.equal(accountDetailRoot.get("status"), 1),
+                builder.equal(accountDetailRoot.get("accountType"), accountType)
         );
 
         Query<AccountDetail> typedQuery = session.createQuery(query);
