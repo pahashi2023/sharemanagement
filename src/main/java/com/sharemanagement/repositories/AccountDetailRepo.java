@@ -11,7 +11,7 @@ public interface AccountDetailRepo {
 //    void saveAccountDetail(AccountDetail accountDetail);
     void saveAccountDetail(List<AccountDetail> accountDetails);
 
-    public List<AccountDetail> getAllAccountDetails(int familyId);
+    public List<AccountDetail> getAllAccountDetails(int familyId,String accountType);
 
     void deleteAccountdetails(int accDetId);
 

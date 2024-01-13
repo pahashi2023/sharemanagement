@@ -32,11 +32,15 @@ public class AccountDetailController {
     }
 
     @PostMapping(value = "/get-all-accountdetails",produces = "application/json",headers="Accept=application/json")
-    public ResponseEntity<String> getAllAccountDetails(@RequestParam(name = "familyId") int familyId ){
+    public ResponseEntity<String> getAllAccountDetails(@RequestParam(name = "familyId") int familyId, @RequestParam(name = "accountType") String accountType ){
 
-        List<AccountDetailDTO> result = accountDetailService.getAllAccountDetails(familyId);
+        List<AccountDetailDTO> result = accountDetailService.getAllAccountDetails(familyId,accountType);
         ResponseDto dto = new ResponseDto();
-        dto.setMessage("success");
+        if(result.isEmpty()){
+            dto.setMessage("Sorry No Data Found...!");
+        }else {
+            dto.setMessage("success");
+        }
         dto.setData(result);
         return ResponseEntity.ok(new Gson().toJson(dto));
     }

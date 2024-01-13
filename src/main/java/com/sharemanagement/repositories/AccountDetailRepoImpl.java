@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.criteria.*;
 import java.util.List;
@@ -44,7 +46,7 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
         }
     }
     @Override
-    public List<AccountDetail> getAllAccountDetails(int familyId) {
+    public List<AccountDetail> getAllAccountDetails(int familyId,String accountType) {
 
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -53,11 +55,11 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
         Root<AccountDetail> accountDetailRoot = query.from(AccountDetail.class);
         accountDetailRoot.fetch("accountMemberDetails", JoinType.LEFT);
 
-        query.select(accountDetailRoot)
-                .distinct(true);
+        query.select(accountDetailRoot);
         query.where(
                 builder.equal(accountDetailRoot.get("familyId"), familyId),
-                builder.equal(accountDetailRoot.get("status"), 1)
+                builder.equal(accountDetailRoot.get("status"), 1),
+                builder.equal(accountDetailRoot.get("accountType"), accountType)
         );
 
         Query<AccountDetail> typedQuery = session.createQuery(query);
@@ -68,11 +70,15 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
     public void deleteAccountdetails(int accDetId) {
 
         Session session = sessionFactory.getCurrentSession();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        Date updatedDate = java.sql.Timestamp.valueOf(currentDateTime);
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaUpdate<AccountDetail> update = builder.createCriteriaUpdate(AccountDetail.class);
         Root<AccountDetail> root = update.from(AccountDetail.class);
 
         update.set("status", 0);
+        update.set("updatedDate",updatedDate);
         update.where(builder.equal(root.get("accDetId"), accDetId));
 
         session.createQuery(update).executeUpdate();
