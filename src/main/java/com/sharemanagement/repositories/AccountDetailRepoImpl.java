@@ -20,6 +20,7 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
     @Autowired
     SessionFactory sessionFactory;
 
+    //For Save and Update Both
     @Override
     public void saveAccountDetail(List<AccountDetail> accountDetails) {
         Session session = sessionFactory.getCurrentSession();
