@@ -176,4 +176,20 @@ public class FamilyServiceImpl implements FamilyService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public List<FamilyDto> getFamilyById(BigInteger familyId) {
+		
+		List<FamilyDto> response = new ArrayList<>();
+		List<FamilyMember> familyData = familyRepo.getFamilyById(familyId);
+		if(familyData != null) {
+			
+			for(FamilyMember data: familyData) {
+				FamilyDto familyDto = mapper.map(data,FamilyDto.class);	
+				response.add(familyDto);
+			}
+		}
+		return response;
+	}
+
 }

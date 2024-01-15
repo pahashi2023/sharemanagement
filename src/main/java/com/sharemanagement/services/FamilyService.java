@@ -12,6 +12,8 @@ public interface FamilyService {
 	
 	public List<FamilyDto> getAllFamily(int pageCount);
 	
+	public List<FamilyDto> getFamilyById(BigInteger familyId);
+	
 	public long getFamiltTotalCount();
 	
 	public String deleteMemberFromFamily(Long memberId,BigInteger userId);

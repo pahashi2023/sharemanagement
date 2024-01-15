@@ -50,6 +50,26 @@ public class FamilyController {
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
        
+       @PostMapping(value = "get-family",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> getFamilyById(@RequestParam(name = "familyId",required = true) BigInteger familyId){
+    	   
+    	   List<FamilyDto> familyDto = familyService.getFamilyById(familyId);
+    	   FamilyResponseDto dto = new FamilyResponseDto();
+    	   if(familyDto.size() == 0) {
+    		   
+        	   dto.setMessage("success");
+        	   dto.setData("No Data");
+        	   return ResponseEntity.ok(new Gson().toJson(dto));
+        	   
+    	   }else {
+    		   
+        	   dto.setMessage("success");
+        	   dto.setData(familyDto);
+        	   return ResponseEntity.ok(new Gson().toJson(dto));
+    	   }
+       }
+       
+       
        @PostMapping(value = "/delete-member",produces = "application/json",headers="Accept=application/json")
        public ResponseEntity<String> deleteMemberById(@RequestParam(name = "memberId", required=true) Long memberId,@RequestParam(name = "userId", required=true) BigInteger userId){
     	   

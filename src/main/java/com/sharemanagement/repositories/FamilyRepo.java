@@ -14,6 +14,8 @@ public interface FamilyRepo {
 	
 	public List<FamilyMember> getAllFamily(int pageCount);
 	
+	public List<FamilyMember> getFamilyById(BigInteger familyId);
+	
 	public long getFamilyTotalCount();
 	
 	public FamilyMember getFamilyMemberById(Long memberId);
