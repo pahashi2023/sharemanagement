@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
+import com.sharemanagement.dto.ViewFamilyDto;
 import com.sharemanagement.entities.Family;
 import com.sharemanagement.entities.FamilyMember;
 import com.sharemanagement.repositories.FamilyRepo;
@@ -219,6 +221,39 @@ public class FamilyServiceImpl implements FamilyService {
 			return "error";
 		}
 		
+	}
+
+	@Override
+	@Transactional
+	public List<ViewFamilyDto> viewFamily(int pageCount) {
+		
+		List<ViewFamilyDto> viewFamilyList = new ArrayList<>();
+		int firstResult = 10;
+		int pgCount = (pageCount-1)* firstResult;
+		List<FamilyMember> familyMember = familyRepo.getAllFamily(pgCount);
+		
+		Map<BigInteger,List<FamilyMember>> grouped = familyMember.stream().collect(Collectors.groupingBy(FamilyMember::getFamilyId));
+		
+		grouped.forEach((id,members) -> {
+			
+			ViewFamilyDto viewFamily = new ViewFamilyDto();
+			viewFamily.setFamilyId(id);
+			List<FamilyDto> family = new ArrayList<>();
+			members.forEach(member->{
+				FamilyDto familyDto = new FamilyDto();
+				familyDto.setFirstName(stringHelperUtils.handleString(member.getFirstName()));
+				familyDto.setLastName(stringHelperUtils.handleString(member.getLastName()));
+				familyDto.setMiddleName(stringHelperUtils.handleString(member.getMiddleName()));
+				familyDto.setMemberId(new BigInteger(String.valueOf(member.getMemberId())));
+				familyDto.setFolioNo("-");
+				familyDto.setCreatedDate(member.getCreatedDate());
+				family.add(familyDto);
+			});
+			viewFamily.setFamily(family);
+			viewFamilyList.add(viewFamily);
+			
+		});
+		return viewFamilyList;
 	}
 
 }

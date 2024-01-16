@@ -1,6 +1,7 @@
 package com.sharemanagement.dto;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -20,16 +21,16 @@ public class FamilyDto {
 	private int status;
 	private BigInteger familyId;
 	private BigInteger memberId;
-	
+	private String folioNo;
+	private Date createdDate;
 	@Override
 	public String toString() {
 		return "FamilyDto [firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
 				+ ", phone=" + phone + ", emailId=" + emailId + ", aadharNo=" + aadharNo + ", panNO=" + panNO
 				+ ", relation=" + relation + ", pinCode=" + pinCode + ", address=" + address + ", status=" + status
-				+ ", familyId=" + familyId + ", memberId=" + memberId + "]";
+				+ ", familyId=" + familyId + ", memberId=" + memberId + ", folioNo=" + folioNo + ", createdDate="
+				+ createdDate + "]";
 	}
-	
-	
 	
 	
 	
