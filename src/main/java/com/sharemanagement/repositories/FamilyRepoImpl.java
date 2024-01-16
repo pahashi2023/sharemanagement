@@ -153,4 +153,35 @@ public class FamilyRepoImpl implements FamilyRepo {
 		}
 	}
 
+	@Override
+	public void deleteFamilyById(Family family) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		session.update(family);
+		
+	}
+
+	@Override
+	public Family getMainFamily(long familyId) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Family> query = builder.createQuery(Family.class);
+		Root<Family> root = query.from(Family.class);
+		
+		query.select(root);
+		
+		Predicate where;
+		where = builder.equal(root.get("familyId"),familyId);
+		where = builder.and(where,builder.equal(root.get("status"),1));
+		query.where(where);
+		
+		Query<Family> q = session.createQuery(query);
+		try {
+		return q.getSingleResult();
+		}catch(Exception e) {
+			return new Family();
+		}
+	}
+
 }

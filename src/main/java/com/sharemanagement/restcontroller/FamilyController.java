@@ -94,5 +94,14 @@ public class FamilyController {
     	   
     	   return ResponseEntity.ok(familyService.getIndividualMember(memberId));
        }
+       
+       @PostMapping(value = "/delete-family",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> deleteFamilyById(@RequestParam(name = "familyId",required = true) long familyId){
+    	   
+    	   String result = familyService.deleteFamilyById(familyId);
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
 	
 }

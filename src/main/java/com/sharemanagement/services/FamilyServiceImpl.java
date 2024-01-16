@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
+import com.sharemanagement.entities.Family;
 import com.sharemanagement.entities.FamilyMember;
 import com.sharemanagement.repositories.FamilyRepo;
 import com.sharemanagement.utils.StringHelperUtils;
@@ -190,6 +191,34 @@ public class FamilyServiceImpl implements FamilyService {
 			}
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional
+	public String deleteFamilyById(long familyId) {
+		
+		try {
+			
+			Family family = familyRepo.getMainFamily(familyId);
+			family.setStatus(0);
+			familyRepo.deleteFamilyById(family);
+			
+			List<FamilyMember> member =  familyRepo.getFamilyById(new BigInteger(String.valueOf(familyId)));
+			
+			for(FamilyMember data : member) {
+				
+				data.setStatus(0);
+				familyRepo.deleteMemberFromFamily(data);
+				
+			}
+			
+			return "success";
+			
+		}catch(Exception e){
+			
+			return "error";
+		}
+		
 	}
 
 }

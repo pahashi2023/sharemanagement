@@ -16,6 +16,8 @@ public interface FamilyRepo {
 	
 	public List<FamilyMember> getFamilyById(BigInteger familyId);
 	
+	public Family getMainFamily(long familyId);
+	
 	public long getFamilyTotalCount();
 	
 	public FamilyMember getFamilyMemberById(Long memberId);
@@ -23,5 +25,7 @@ public interface FamilyRepo {
 	public FamilyMember getFamilyMemberByIdActive(Long memberId);
 	
 	public void deleteMemberFromFamily(FamilyMember familyMember);
+	
+	public void deleteFamilyById(Family family);
 
 }
