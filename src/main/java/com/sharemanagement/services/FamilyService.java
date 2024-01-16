@@ -27,5 +27,7 @@ public interface FamilyService {
 	
 	public String deleteFamilyById(long familyId);
 	
+	public String addMemberInFamily(FamilyRequestDto familyRequestDto);
+	
 
 }

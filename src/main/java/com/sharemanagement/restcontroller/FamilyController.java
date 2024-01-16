@@ -115,5 +115,14 @@ public class FamilyController {
     	   dto.setTotalPage(familyService.getFamiltTotalCount());
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
+       
+       @PostMapping(value = "/add-member",produces = "application/json",consumes = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> addMemberInFamily(@RequestBody FamilyRequestDto familyRequestDto){
+    	   
+           String result = familyService.addMemberInFamily(familyRequestDto);
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
 	
 }
