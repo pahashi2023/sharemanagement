@@ -18,6 +18,7 @@ import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
 import com.sharemanagement.dto.FamilyResponseDto;
 import com.sharemanagement.dto.ResponseDto;
+import com.sharemanagement.dto.ViewFamilyDto;
 import com.sharemanagement.services.FamilyService;
 
 @RestController
@@ -50,6 +51,26 @@ public class FamilyController {
     	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
        
+       @PostMapping(value = "get-family",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> getFamilyById(@RequestParam(name = "familyId",required = true) BigInteger familyId){
+    	   
+    	   List<FamilyDto> familyDto = familyService.getFamilyById(familyId);
+    	   FamilyResponseDto dto = new FamilyResponseDto();
+    	   if(familyDto.size() == 0) {
+    		   
+        	   dto.setMessage("success");
+        	   dto.setData("No Data");
+        	   return ResponseEntity.ok(new Gson().toJson(dto));
+        	   
+    	   }else {
+    		   
+        	   dto.setMessage("success");
+        	   dto.setData(familyDto);
+        	   return ResponseEntity.ok(new Gson().toJson(dto));
+    	   }
+       }
+       
+       
        @PostMapping(value = "/delete-member",produces = "application/json",headers="Accept=application/json")
        public ResponseEntity<String> deleteMemberById(@RequestParam(name = "memberId", required=true) Long memberId,@RequestParam(name = "userId", required=true) BigInteger userId){
     	   
@@ -73,6 +94,35 @@ public class FamilyController {
        public ResponseEntity<String> getIndividualMember(@RequestParam(name = "memberId", required=true) Long memberId){
     	   
     	   return ResponseEntity.ok(familyService.getIndividualMember(memberId));
+       }
+       
+       @PostMapping(value = "/delete-family",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> deleteFamilyById(@RequestParam(name = "familyId",required = true) long familyId){
+    	   
+    	   String result = familyService.deleteFamilyById(familyId);
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
+       
+       @PostMapping(value = "/view-family",produces = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> viewFamily(@RequestParam(name = "pageCount",required=false,defaultValue = "1") int pageCount){
+    	   
+    	   List<ViewFamilyDto> result =  familyService.viewFamily(pageCount);
+    	   FamilyResponseDto dto = new FamilyResponseDto();
+    	   dto.setMessage("success");
+    	   dto.setData(result);
+    	   dto.setTotalPage(familyService.getFamiltTotalCount());
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
+       }
+       
+       @PostMapping(value = "/add-member",produces = "application/json",consumes = "application/json",headers="Accept=application/json")
+       public ResponseEntity<String> addMemberInFamily(@RequestBody FamilyRequestDto familyRequestDto){
+    	   
+           String result = familyService.addMemberInFamily(familyRequestDto);
+    	   ResponseDto dto = new ResponseDto();
+    	   dto.setMessage(result);
+    	   return ResponseEntity.ok(new Gson().toJson(dto));
        }
 	
 }

@@ -5,12 +5,17 @@ import java.util.List;
 
 import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
+import com.sharemanagement.dto.ViewFamilyDto;
 
 public interface FamilyService {
 	
 	public String createFamily(FamilyRequestDto familyRequestDto) throws Exception;
 	
 	public List<FamilyDto> getAllFamily(int pageCount);
+	
+	public List<ViewFamilyDto> viewFamily(int pageCount);
+	
+	public List<FamilyDto> getFamilyById(BigInteger familyId);
 	
 	public long getFamiltTotalCount();
 	
@@ -19,5 +24,10 @@ public interface FamilyService {
 	public String updateFamilyMember(FamilyDto familyDto,BigInteger userId);
 	
 	public String getIndividualMember(Long memberId);
+	
+	public String deleteFamilyById(long familyId);
+	
+	public String addMemberInFamily(FamilyRequestDto familyRequestDto);
+	
 
 }

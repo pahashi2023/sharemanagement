@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 import com.sharemanagement.dto.FamilyDto;
 import com.sharemanagement.dto.FamilyRequestDto;
+import com.sharemanagement.dto.ViewFamilyDto;
+import com.sharemanagement.entities.Family;
 import com.sharemanagement.entities.FamilyMember;
 import com.sharemanagement.repositories.FamilyRepo;
 import com.sharemanagement.utils.StringHelperUtils;
@@ -174,6 +177,114 @@ public class FamilyServiceImpl implements FamilyService {
 			res.put("message", "User not exist!");
 			return new Gson().toJson(res);
 		}
+	}
+
+	@Override
+	@Transactional
+	public List<FamilyDto> getFamilyById(BigInteger familyId) {
+		
+		List<FamilyDto> response = new ArrayList<>();
+		List<FamilyMember> familyData = familyRepo.getFamilyById(familyId);
+		if(familyData != null) {
+			
+			for(FamilyMember data: familyData) {
+				FamilyDto familyDto = mapper.map(data,FamilyDto.class);	
+				response.add(familyDto);
+			}
+		}
+		return response;
+	}
+
+	@Override
+	@Transactional
+	public String deleteFamilyById(long familyId) {
+		
+		try {
+			
+			Family family = familyRepo.getMainFamily(familyId);
+			family.setStatus(0);
+			familyRepo.deleteFamilyById(family);
+			
+			List<FamilyMember> member =  familyRepo.getFamilyById(new BigInteger(String.valueOf(familyId)));
+			
+			for(FamilyMember data : member) {
+				
+				data.setStatus(0);
+				familyRepo.deleteMemberFromFamily(data);
+				
+			}
+			
+			return "success";
+			
+		}catch(Exception e){
+			
+			return "error";
+		}
+		
+	}
+
+	@Override
+	@Transactional
+	public List<ViewFamilyDto> viewFamily(int pageCount) {
+		
+		List<ViewFamilyDto> viewFamilyList = new ArrayList<>();
+		int firstResult = 10;
+		int pgCount = (pageCount-1)* firstResult;
+		List<FamilyMember> familyMember = familyRepo.getAllFamily(pgCount);
+		
+		Map<BigInteger,List<FamilyMember>> grouped = familyMember.stream().collect(Collectors.groupingBy(FamilyMember::getFamilyId));
+		
+		grouped.forEach((id,members) -> {
+			
+			ViewFamilyDto viewFamily = new ViewFamilyDto();
+			viewFamily.setFamilyId(id);
+			List<FamilyDto> family = new ArrayList<>();
+			members.forEach(member->{
+				FamilyDto familyDto = new FamilyDto();
+				familyDto.setFirstName(stringHelperUtils.handleString(member.getFirstName()));
+				familyDto.setLastName(stringHelperUtils.handleString(member.getLastName()));
+				familyDto.setMiddleName(stringHelperUtils.handleString(member.getMiddleName()));
+				familyDto.setMemberId(new BigInteger(String.valueOf(member.getMemberId())));
+				familyDto.setFolioNo("-");
+				familyDto.setCreatedDate(member.getCreatedDate());
+				family.add(familyDto);
+			});
+			viewFamily.setFamily(family);
+			viewFamilyList.add(viewFamily);
+			
+		});
+		return viewFamilyList;
+	}
+
+	@Override
+	@Transactional
+	public String addMemberInFamily(FamilyRequestDto familyRequestDto) {
+		
+		try {
+			
+             familyRequestDto.getFamilyDto().stream().forEach(family -> {
+			FamilyMember families = new FamilyMember();
+			families.setAadharNo(stringHelperUtils.handleString(family.getAadharNo()));
+			families.setAddress(stringHelperUtils.handleString(family.getAddress()));
+			families.setEmailId(stringHelperUtils.handleString(family.getEmailId()));
+			families.setFirstName(stringHelperUtils.handleString(family.getFirstName()));
+			families.setMiddleName(stringHelperUtils.handleString(family.getMiddleName()));
+			families.setLastName(stringHelperUtils.handleString(family.getLastName()));
+			families.setPanNo(stringHelperUtils.handleString(family.getPanNO()));
+			families.setPhone(stringHelperUtils.handleString(family.getPhone()));
+			families.setRelation(stringHelperUtils.handleString(family.getRelation()));
+			families.setFamilyId(new BigInteger(String.valueOf(family.getFamilyId())));
+			families.setStatus(1);
+			families.setCreatedBy(new BigInteger(String.valueOf(familyRequestDto.getUserId())));
+			families.setPinCode(family.getPinCode());
+			familyRepo.createFamily(families);
+		});
+              return "success";
+		}catch(Exception e) {
+			
+			return "error";
+		}
+		
 	}
 
 }
