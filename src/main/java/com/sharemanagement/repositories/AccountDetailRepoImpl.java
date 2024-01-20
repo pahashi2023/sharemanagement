@@ -52,19 +52,27 @@ public class AccountDetailRepoImpl implements AccountDetailRepo{
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<AccountDetail> query = builder.createQuery(AccountDetail.class);
-
         Root<AccountDetail> accountDetailRoot = query.from(AccountDetail.class);
+
         accountDetailRoot.fetch("accountMemberDetails", JoinType.LEFT);
 
-        query.select(accountDetailRoot);
-        query.where(
-                builder.equal(accountDetailRoot.get("familyId"), familyId),
-                builder.equal(accountDetailRoot.get("status"), 1),
-                builder.equal(accountDetailRoot.get("accountType"), accountType)
-        );
+        query.select(accountDetailRoot).distinct(true);
+
+        Predicate familyIdPredicate = builder.equal(accountDetailRoot.get("familyId"), familyId);
+        Predicate statusPredicate = builder.equal(accountDetailRoot.get("status"), 1);
+
+        Predicate familyIdAndStatusPredicate = builder.and(familyIdPredicate, statusPredicate);
+
+        if (accountType != null && !accountType.isEmpty()) {
+            Predicate accountTypePredicate = builder.equal(accountDetailRoot.get("accountType"), accountType);
+            query.where(builder.and(familyIdAndStatusPredicate, accountTypePredicate));
+        } else {
+            query.where(familyIdAndStatusPredicate);
+        }
 
         Query<AccountDetail> typedQuery = session.createQuery(query);
         return typedQuery.getResultList();
+
     }
 
     @Override

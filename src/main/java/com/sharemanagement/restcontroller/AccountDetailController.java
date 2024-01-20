@@ -32,7 +32,7 @@ public class AccountDetailController {
     }
 
     @PostMapping(value = "/get-all-accountdetails",produces = "application/json",headers="Accept=application/json")
-    public ResponseEntity<String> getAllAccountDetails(@RequestParam(name = "familyId") int familyId, @RequestParam(name = "accountType") String accountType ){
+    public ResponseEntity<String> getAllAccountDetails(@RequestParam(name = "familyId") int familyId, @RequestParam(name = "accountType" ,required = false) String accountType ){
 
         List<AccountDetailDTO> result = accountDetailService.getAllAccountDetails(familyId,accountType);
         ResponseDto dto = new ResponseDto();
