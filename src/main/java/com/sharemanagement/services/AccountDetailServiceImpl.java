@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +46,7 @@ public class AccountDetailServiceImpl implements AccountDetailService {
                     accountDetail.setEmail(stringHelperUtils.handleString(dto.getEmail()));
                     accountDetail.setPhone(stringHelperUtils.handleString(dto.getPhone()));
                     accountDetail.setAccountOpeningDate(dto.getAccountOpeningDate());
+                    accountDetail.setBankBranchName(dto.getBankBranchName());
                     accountDetail.setStatus(1);
 
                     // Check if accDetId exists, then update;

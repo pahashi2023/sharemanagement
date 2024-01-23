@@ -3,7 +3,6 @@ package com.sharemanagement.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -25,4 +24,5 @@ public class AccountDetailDTO {
     private String email;
     private String phone;
     private Date accountOpeningDate;
+    private String bankBranchName;
 }

@@ -78,6 +78,9 @@ public class AccountDetail implements Serializable {
     @Column(name="account_opening_date")
     private Date accountOpeningDate;
 
+    @Column(name = "bank_branch_name")
+    private String bankBranchName;
+
     public AccountDetail() {
     }
 
