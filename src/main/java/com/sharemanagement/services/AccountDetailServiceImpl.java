@@ -47,6 +47,9 @@ public class AccountDetailServiceImpl implements AccountDetailService {
                     accountDetail.setPhone(stringHelperUtils.handleString(dto.getPhone()));
                     accountDetail.setAccountOpeningDate(dto.getAccountOpeningDate());
                     accountDetail.setBankBranchName(dto.getBankBranchName());
+                    accountDetail.setExecutivePhone(stringHelperUtils.handleString(dto.getExecutivePhone()));
+                    accountDetail.setExecutiveEmail(stringHelperUtils.handleString(dto.getExecutiveEmail()));
+                    accountDetail.setBankPinCode(dto.getBankPinCode());
                     accountDetail.setStatus(1);
 
                     // Check if accDetId exists, then update;

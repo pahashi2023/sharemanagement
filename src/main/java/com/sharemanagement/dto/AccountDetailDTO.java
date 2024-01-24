@@ -25,4 +25,8 @@ public class AccountDetailDTO {
     private String phone;
     private Date accountOpeningDate;
     private String bankBranchName;
+    private String executiveEmail;
+    private String executivePhone;
+    private BigInteger bankPinCode;
+
 }

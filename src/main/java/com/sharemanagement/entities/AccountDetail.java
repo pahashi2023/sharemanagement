@@ -81,6 +81,15 @@ public class AccountDetail implements Serializable {
     @Column(name = "bank_branch_name")
     private String bankBranchName;
 
+    @Column(name="executive_email")
+    private String executiveEmail;
+
+    @Column(name="executive_number")
+    private String executivePhone;
+
+    @Column(name="bank_pincode")
+    private BigInteger bankPinCode;
+
     public AccountDetail() {
     }
 

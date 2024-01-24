@@ -52,7 +52,7 @@ public class FamilyRepoImpl implements FamilyRepo {
 		
 		Predicate where;
 		where = builder.equal(root.get("status"), 1);
-		query.where(where);
+		query.where(where).orderBy(builder.desc(root.get("memberId")));
 		
 		Query<FamilyMember> q = session.createQuery(query);
 		return q.setFirstResult(pageCount).setMaxResults(10).getResultList();
